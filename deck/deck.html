@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1080" />
+  <title>Prompt rules are advisory. Enforcement is architecture. (LinkedIn carousel)</title>
+
+  
+  <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.15/css/carbon-components.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #0b0b0b;
+      font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 32px 0 64px;
+    }
+
+    /* ============ the slide ============ */
+    .slide {
+      width: 1080px;
+      height: 1350px;
+      flex: 0 0 auto;
+      background: #161616;
+      color: #f4f4f4;
+      position: relative;
+      overflow: hidden;
+      padding: 92px 88px 120px;
+      display: flex;
+      flex-direction: column;
+    }
+    /* faint grid texture, Carbon-style */
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+    }
+    .slide > * { position: relative; }
+
+    .kicker {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 23px;
+      font-weight: 600;
+      letter-spacing: 3.5px;
+      color: #78a9ff;
+      margin: 0 0 36px;
+      text-transform: uppercase;
+    }
+    .slide h1 {
+      font-size: 66px;
+      line-height: 1.14;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin: 0 0 40px;
+      max-width: 920px;
+    }
+    .slide h1 .dim { color: #8d8d8d; font-weight: 400; }
+    .slide .body {
+      font-size: 30px;
+      line-height: 1.55;
+      color: #e0e0e0;
+      margin: 0 0 28px;
+      max-width: 920px;
+    }
+    .slide .body strong { color: #ffffff; font-weight: 600; }
+    .slide .body.small { font-size: 26px; color: #c6c6c6; }
+
+    .analogy {
+      margin-top: 28px;
+      padding: 28px 32px;
+      background: #262626;
+      border-left: 6px solid #78a9ff;
+      font-size: 28px;
+      line-height: 1.5;
+      color: #f4f4f4;
+    }
+    .analogy .lbl {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      letter-spacing: 2.5px;
+      color: #8d8d8d;
+      margin-bottom: 12px;
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 0; }
+    .chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 22px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: #262626;
+      border: 1px solid #525252;
+      color: #f4f4f4;
+    }
+    .chip.layer { background: #0f62fe; border-color: #0f62fe; color: #ffffff; }
+    .chip.pattern { border-color: #78a9ff; color: #78a9ff; }
+
+    .contain {
+      margin-top: auto;
+      padding-top: 32px;
+      border-top: 1px solid #393939;
+    }
+    .contain .lbl {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      letter-spacing: 2.5px;
+      color: #8d8d8d;
+      margin-bottom: 16px;
+    }
+    .contain p {
+      font-size: 27px;
+      line-height: 1.5;
+      color: #e0e0e0;
+      margin: 0 0 18px;
+    }
+
+    /* five-layer tiles (slide 4) */
+    .tiles { display: flex; flex-direction: column; gap: 18px; margin-top: 8px; }
+    .tile {
+      background: #262626;
+      border: 1px solid #393939;
+      border-left: 6px solid #0f62fe;
+      padding: 22px 28px;
+      display: flex;
+      gap: 24px;
+      align-items: baseline;
+    }
+    .tile .n {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 24px;
+      color: #78a9ff;
+      flex: 0 0 44px;
+    }
+    .tile .t { font-size: 29px; font-weight: 600; flex: 0 0 300px; }
+    .tile .d { font-size: 25px; color: #c6c6c6; line-height: 1.45; }
+
+    .cta {
+      margin-top: 36px;
+      background: #0f62fe;
+      padding: 30px 36px;
+      font-size: 30px;
+      line-height: 1.45;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .cta .sub { display: block; font-weight: 400; font-size: 25px; margin-top: 10px; opacity: 0.92; }
+
+    .prov { margin: 6px 0 0; padding: 0; list-style: none; }
+    .prov li {
+      font-size: 27px;
+      line-height: 1.5;
+      color: #e0e0e0;
+      padding: 16px 0 16px 40px;
+      position: relative;
+      border-bottom: 1px solid #262626;
+    }
+    .prov li::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 30px;
+      width: 12px;
+      height: 12px;
+      background: #78a9ff;
+    }
+    .prov li strong { color: #fff; }
+
+    /* footer chrome */
+    .foot {
+      position: absolute;
+      left: 88px;
+      right: 88px;
+      bottom: 44px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .foot .num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 21px;
+      color: #8d8d8d;
+      white-space: nowrap;
+    }
+    .foot .bar { flex: 1; height: 4px; background: #262626; position: relative; }
+    .foot .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #78a9ff; }
+    .foot .brand {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 21px;
+      color: #6f6f6f;
+      white-space: nowrap;
+    }
+
+    /* ============ print: one slide per page ============ */
+    @page { size: 11.25in 14.0625in; margin: 0; }
+    @media print {
+      body { display: block; padding: 0; gap: 0; background: #161616; }
+      .slide { break-after: page; break-inside: avoid; margin: 0; }
+      .slide:last-child { break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <section class="slide" id="s1">
+    <p class="kicker">A rabbit-hole aside &middot; from the BACcheck series</p>
+    <h1>Your agent reads your inbox. So does everyone who emails you.</h1>
+    <p class="body">I read an article about an AI assistant getting broken. Instead of thinking &ldquo;that&rsquo;s bad&rdquo; and moving on, I researched the claims with my agents, found actual CVEs, and worked with them to build hardened tools and hardened prompts.</p>
+    <p class="body"><strong>Seventeen attack patterns</strong> later, here are five of them, and the machinery that contains them. Swipe on.</p>
+    <div class="analogy">
+      <span class="lbl">For the non-technical half of the room</span>
+      You would not run a factory on instructions taped to the robots, with no guards on the doors. Do not run your agents that way either.
+    </div>
+    <div class="foot"><span class="num">01 / 10</span><span class="bar"><i style="width:10%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s2">
+    <p class="kicker">The problem</p>
+    <h1>Telling it &ldquo;don&rsquo;t&rdquo; is not a security model.</h1>
+    <p class="body">Prompt rules are advice. Advice gets ignored, talked around, or buried under a white-on-white paragraph in an invoice.</p>
+    <p class="body">Microsoft built a classifier to catch injection in Copilot. <strong>EchoLeak walked straight through it.</strong> If the rule lives in the prompt, the attacker just needs a better sentence.</p>
+    <div class="foot"><span class="num">02 / 10</span><span class="bar"><i style="width:20%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s3">
+    <p class="kicker">The takeaway</p>
+    <h1>Prompt rules are advisory.<br /><span class="dim">Real agent security is</span> enforced architecture.</h1>
+    <p class="body">So put the enforcement <strong>below the prompt, in the harness</strong>: requirements the model cannot talk its way around, no matter how pretty the sentence.</p>
+    <p class="body small">Five of them. Next slide.</p>
+    <div class="foot"><span class="num">03 / 10</span><span class="bar"><i style="width:30%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s4">
+    <p class="kicker">The machinery &middot; five layers</p>
+    <h1>Five requirements. Each one below the prompt.</h1>
+    <div class="tiles">
+      <div class="tile"><span class="n">01</span><span class="t">Ingestion pipeline</span><span class="d">Untrusted content gets labelled at the door. Data, never instructions.</span></div>
+      <div class="tile"><span class="n">02</span><span class="t">Capability manifests</span><span class="d">Every task gets a written, expiring permission slip. No manifest, no action.</span></div>
+      <div class="tile"><span class="n">03</span><span class="t">Policy gate</span><span class="d">Every tool call is judged before it runs. Irreversible acts ask a human.</span></div>
+      <div class="tile"><span class="n">04</span><span class="t">Memory gate</span><span class="d">Nothing enters long-term memory unexamined. High-stakes facts need confirmation.</span></div>
+      <div class="tile"><span class="n">05</span><span class="t">Audit ledger</span><span class="d">Every decision written down and hash-chained. The receipt outlives the session.</span></div>
+    </div>
+    <div class="foot"><span class="num">04 / 10</span><span class="bar"><i style="width:40%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s5">
+    <p class="kicker">Pattern 03 of 17</p>
+    <h1>The email that gives orders to your assistant.</h1>
+    <p class="body">My morning triage reads my email and summarises it. A phishing mail can carry instructions: <strong>forward this thread, approve that refund</strong>. No human in the loop.</p>
+    <div class="contain">
+      <p class="lbl">Contained by</p>
+      <div class="chips"><span class="chip layer">ingestion pipeline</span><span class="chip layer">policy gate</span></div>
+      <p style="margin-top:18px">Mail is labelled untrusted data at the door. Anything shaped like an instruction gets flagged, never followed. Every tool call is judged before it runs.</p>
+    </div>
+    <div class="foot"><span class="num">05 / 10</span><span class="bar"><i style="width:50%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s6">
+    <p class="kicker">Pattern 13 of 17</p>
+    <h1>The injection that survives the session.</h1>
+    <p class="body">One-shot injection attacks the session. <strong>Memory poisoning attacks the memory.</strong> Plant a false fact, like a changed finance contact address, and it sits quietly until some future session acts on it. The attacker is long gone by then.</p>
+    <div class="contain">
+      <p class="lbl">Contained by</p>
+      <div class="chips"><span class="chip layer">memory gate</span></div>
+      <p style="margin-top:18px">Memory writes carry source and timestamp. High-stakes facts need confirmation before commit. Memory stays inspectable, and surgically deletable.</p>
+    </div>
+    <div class="foot"><span class="num">06 / 10</span><span class="bar"><i style="width:60%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s7">
+    <p class="kicker">Pattern 17 of 17 &middot; this week&rsquo;s news</p>
+    <h1>One email, two targets.</h1>
+    <p class="body">The invoice <strong>you</strong> see looks ordinary. The white-on-white text your <strong>agent</strong> sees says update the vendor details. You would eyeball it and see nothing wrong. This is the Barracuda campaign from this week.</p>
+    <div class="contain">
+      <p class="lbl">Contained by</p>
+      <div class="chips"><span class="chip layer">ingestion pipeline</span><span class="chip layer">policy gate</span></div>
+      <p style="margin-top:18px">Agent-facing mail is rendered to plain text before ingestion. No HTML, no hiding channel. And detection is only defence in depth: containment carries the weight.</p>
+    </div>
+    <div class="foot"><span class="num">07 / 10</span><span class="bar"><i style="width:70%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s8">
+    <p class="kicker">Pattern 14 of 17</p>
+    <h1>You installed dozens of strangers.</h1>
+    <p class="body">Skills run with your agent&rsquo;s permissions. I run <strong>dozens I never fully audited</strong>. A skill can update into something malicious tomorrow and inherit my inbox, my calendar, my finances.</p>
+    <div class="contain">
+      <p class="lbl">Contained by</p>
+      <div class="chips"><span class="chip layer">capability manifests</span></div>
+      <p style="margin-top:18px">Every task gets a written, expiring permission slip: these tools, this data, nothing else. Versions pinned, updates re-prompt. No manifest, no action.</p>
+    </div>
+    <div class="foot"><span class="num">08 / 10</span><span class="bar"><i style="width:80%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s9">
+    <p class="kicker">Pattern 06 of 17</p>
+    <h1>Your standing permissions are a delivery service.</h1>
+    <p class="body">Standing permissions let my assistant email on a schedule. If injected content ever steered what it writes, those become <strong>a delivery service to my family&rsquo;s inboxes</strong>.</p>
+    <div class="contain">
+      <p class="lbl">Contained by</p>
+      <div class="chips"><span class="chip layer">policy gate</span></div>
+      <p style="margin-top:18px">The standing permission covers the schedule and the format. Never the content source. The gate re-checks every send, and irreversible acts always ask a human first.</p>
+    </div>
+    <div class="foot"><span class="num">09 / 10</span><span class="bar"><i style="width:90%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+  
+  <section class="slide" id="s10">
+    <p class="kicker">Where this came from</p>
+    <h1>Seventeen patterns. Three research passes. One document.</h1>
+    <ul class="prov">
+      <li><strong>Pass one:</strong> the article, researched properly: my agents, actual CVEs, mapped against my own setup. Crons, memory files, subagents, personal data.</li>
+      <li><strong>Pass two:</strong> the red-team literature. EchoLeak, memory-poisoning research, OWASP.</li>
+      <li><strong>Pass three:</strong> this week&rsquo;s Barracuda campaign. Instructions hidden in ordinary email.</li>
+    </ul>
+    <div class="cta">
+      The deck is the trailer. The document is the film.
+      <span class="sub">Full reference, all seventeen patterns mapped to the five layers: link in the post.</span>
+    </div>
+    <p class="body small" style="margin-top:26px">An aside from the BACcheck series. It complements it: BACcheck watches the network, this watches the agent. Back to buildings next week.</p>
+    <div class="foot"><span class="num">10 / 10</span><span class="bar"><i style="width:100%"></i></span><span class="brand">ENFORCED, NOT ADVISED</span></div>
+  </section>
+
+</body>
+</html>
